@@ -1,0 +1,10 @@
+name: SV-Phenotype-Browser
+dependencies:
+  - python>=3.5
+  - anaconda
+  - sqlite
+  - pandas
+  - pip
+  - pip:
+    - Cython
+    - owlready2=0.39
