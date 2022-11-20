@@ -38,9 +38,14 @@ def read_vcf(obo, path):
                     if onto_row.startswith('MONDO'):
                         mondo_split = onto_row.split(':')
                         mondo_id = mondo_split[-1]
-                        mondo_field = 'MONDO_' + mondo_id
-                        #mondo_phenotype = obo[mondo_field].label[0]
-                        4
+                        try:
+                            mondo_field = 'MONDO_' + mondo_id
+                            mondo_phenotype = obo[mondo_field].label[0]
+
+                            # TODO: Store the data in the database
+                        except Exception as e:
+                            print("Phenotype error: ")
+                            print(e)
 
     return vcf_df
 
