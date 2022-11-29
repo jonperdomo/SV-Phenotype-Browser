@@ -4,7 +4,7 @@
 </head>
     <body>
         <form method= POST>
-                <label for 'Htype[]'><br>Select a phenotype<br></label>
+                <label><br>Select a phenotype<br></label>
                 <select name="phenotype">
                     <option value=''>Select...</option>
                     <option value='P1'>P1</option>
@@ -14,9 +14,14 @@
                 </select>
         <input type='submit' name='Sumbit' value='Submit'/>
         </form>
+        <?php
+            $checkp = $_POST["phenotype"];
+            echo $checkp
+        ?>
+        <?php $histo= exec("python histogram.py ".$_POST["phenotype"]; $echo $histo); ?>
+        <?php $subtabs = exec("python sumtab.py ".$_POST["phenotype"]); echo $subtabs?>
+        <?php $ivg = exec("python igvgraph.py ".$_POST["phenotype"]); echo $ivg?>
     </body>
 </html>
 
-<?php system  ("histogram.py ".$_POST["phenotype"]); ?>
-<?php system  ("sumtab.py ".$_POST["phenotype"]); ?>
-<?php system  ("igvgraph.py ".$_POST["phenotype"]); ?>
+
