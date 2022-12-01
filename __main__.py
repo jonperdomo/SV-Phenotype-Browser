@@ -3,6 +3,7 @@
 import os
 import io
 import pandas as pd
+import sqlite3
 from owlready2 import *
 
 
@@ -11,6 +12,16 @@ def read_mondo_ids_from_vcf():
 
 
 def read_vcf(obo, path):
+    # Create the database
+    db_filepath = r"sv_phenotypes.sqlite"
+    conn = sqlite3.connect(db_filepath)
+
+    # Create a table
+    conn.execute('CREATE TABLE IF NOT EXISTS SV_PHENOTYPES (SV_ID VARCHAR(50), CHROM VARCHAR(10), SV_START INTEGER, '
+                 'SV_END INTEGER, PHENOTYPE VARCHAR(50));')
+    conn.commit()  # make sure to commit() so your changes are saved.
+
+    # Open the file
     with open(path, 'r') as f:
         lines = [l for l in f if not l.startswith('##')]
 
@@ -24,14 +35,21 @@ def read_vcf(obo, path):
     # Split data by chromosome, genomic location and MONDO phenotype
     row_count = vcf_df.shape[0]
     for i in range(row_count):
-        chrom_data = vcf_df.loc[i, 'CHROM']  # Chromosome number
-        pos_data = vcf_df.loc[i, 'POS']  # Reference position, with the 1st base having position 1
+        sv_id = str(vcf_df.loc[i, 'ID'])  # SV ID
+        chromosome_number = str(vcf_df.loc[i, 'CHROM'])  # Chromosome number
+        start_position = int(vcf_df.loc[i, 'POS'])  # Reference position, with the 1st base having position 1
 
-        # Get the mondo phenotype
+        # Get the SV length and mondo phenotype
         info_data = vcf_df.loc[i, 'INFO']
         info_split = info_data.split(';')
+        mondo_phenotype = ''
+        end_position = -1
         for info_row in info_split:
-            if info_row.startswith('PHENO='):
+            if info_row.startswith('END='):
+                end_split = info_row.split('=')
+                end_position = int(end_split[-1])
+
+            elif info_row.startswith('PHENO='):
                 pheno_split = info_row.split('=')
                 onto_split = pheno_split[-1].split(',')
                 for onto_row in onto_split:
@@ -42,10 +60,22 @@ def read_vcf(obo, path):
                             mondo_field = 'MONDO_' + mondo_id
                             mondo_phenotype = obo[mondo_field].label[0]
 
-                            # TODO: Store the data in the database
                         except Exception as e:
                             print("Phenotype error: ")
                             print(e)
+
+        # Store in the database
+        if mondo_phenotype != '' and end_position != -1:
+
+            # Insert data into the table
+            exec_str = f'INSERT INTO SV_PHENOTYPES(SV_ID, CHROM, SV_START, SV_END, PHENOTYPE) VALUES ("{sv_id}",' \
+                       f'"{chromosome_number}", "{start_position}", "{end_position}", "{mondo_phenotype}")'
+            conn.execute(exec_str)
+
+            print("Stored: ", mondo_phenotype)
+
+    conn.commit()
+    conn.close()
 
     return vcf_df
 
