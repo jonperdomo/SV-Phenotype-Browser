@@ -9,30 +9,57 @@
     <h1>Exploration of Phenotype</h1>
     <h3>By: Monica Jesteen, Balsam Mohammad, and Jonathan Perdomo</h3>
     <h4>BMES 550-900</h4>
-    <br><i>Instructions: Select a phenotype from the dropdown menu below.</i><br>
+    <br><i>Instructions: Select a phenotype and a chromosome from the dropdown menus below.</i><br>
     <div></div>
+
     <body> 
+        <?php // Query for unique chromosomes and unique phenotypes from sqlite database.
+             // Array will be used to populate dropdown menus.
+            $db = new SQLite3('sv_phenotypes.sqlite');
+
+            $results_chromsome = $db->query('SELECT DISTINCT chrom FROM sv_phenotypes ORDER BY chrom');
+            while ($row_chrom = $results_chromsome->fetchArray(SQLITE3_BOTH)) {
+                $chrom_unique[] = $row_chrom[0];
+            }
+        ?>
+        <?php
+            $results_phenotype = $db->query('SELECT DISTINCT phenotype FROM sv_phenotypes ORDER BY phenotype');
+            while ($row_pheno = $results_phenotype->fetchArray(SQLITE3_BOTH)) {
+                $pheno_unique[] = $row_pheno[0];
+            }
+        ?>
+    
         <form method= POST> 
-                <label><br>Select a phenotype:<br></label> 
+                <label><br>Select a phenotype:<br></label> <?php // Create dropdown menu for phenotypes ?>
                 <select name="phenotype">
-                    <option value=''>Select...</option>
-                    <option value='BENTA disease'>BENTA disease</option>
-                    <option value='Kleefstra syndrome'>Kleefstra syndrome</option>
-                    <option value='Kleefstra syndrome 2'>Kleefstra syndrome 2</option>
-                    <option value='anemia'>anemia</option>
-                    <option value='anxiety'>anxiety</option>
+                    <option selected="selected">Select...</option>
+                    <?php 
+                        foreach($pheno_unique as $item_phenotype){
+                            echo "<option value='implode($item_phenotype)'>$item_phenotype</option>";
+                        }
+                    ?>
+                </select>
+                <br>
+                <label><br>Select a chromosome:<br></label> <?php // Create dropdown menu for chromosomes ?>
+                <select name="chromosome">
+                    <option selected="selected">Select...</option>
+                    <?php 
+                        foreach($chrom_unique as $item_chromosome){
+                            echo "<option value='implode($item_chromosome)'>$item_chromosome</option>";
+                        }
+                    ?>
                 </select>
         <input type='submit' name='Sumbit' value='Submit'/>
         </form>
-        <?php $argvari = $_POST["phenotype"]; echo $argvari; echo " a is " .is_string($argvari)."<br>"?> <?php #this is to just check the dropdown ment ?>
 
-        <?php #display the resulting graphs and summary tables. Update the path according to the your computer. ?>
-        <?php $histo = escapeshellcmd('python C:\cygwin64\home\marya\Dropbox\Dropbox\bmes550.MonicaJesteen.mj486\web\Final Project\histo.py "'.$argvari.'"'); $outputh =shell_exec($histo); echo $outputh; ?>
-        <?php $sumtabs = escapeshellcmd('python C:\cygwin64\home\marya\Dropbox\Dropbox\bmes550.MonicaJesteen.mj486\web\Final Project\sumtab.py "'.$argvari.'"'); $outputs =shell_exec($sumtabs); echo $outputs; ?>
-        <?php $ivg = escapeshellcmd('python C:\cygwin64\home\marya\Dropbox\Dropbox\bmes550.MonicaJesteen.mj486\web\Final Project\ivg.py "'.$argvari.'"'); $outputi =shell_exec($ivg); echo $outputi;?>
-       
+        <?php // Parses form selection to user input in the form of a string.
+            $arg_pheno = explode(')',(explode('(',$_POST["phenotype"])[1]))[0]; echo "Selected phenotype: " .$arg_pheno. "<br>"; 
+            $arg_chrom = explode(')',(explode('(',$_POST["chromosome"])[1]))[0]; echo "Selected chromosome: " .$arg_chrom. "<br>";
+        ?>
+
+        <?php // Display the resulting graphs and summary tables. Update the path according to the your computer. ?>
+        <?php $histo = escapeshellcmd('python C:\cygwin64\home\marya\Dropbox\Dropbox\bmes550.MonicaJesteen.mj486\web\Final Project\histo.py "'.$arg_pheno.'", "'.$arg_chrom.'"'); $outputh =shell_exec($histo); echo $outputh; ?>
+        <?php $sumtabs = escapeshellcmd('python C:\cygwin64\home\marya\Dropbox\Dropbox\bmes550.MonicaJesteen.mj486\web\Final Project\sumtab.py "'.$arg_pheno.'"'); $outputs =shell_exec($sumtabs); echo $outputs; ?>
+        <?php $ivg = escapeshellcmd('python C:\cygwin64\home\marya\Dropbox\Dropbox\bmes550.MonicaJesteen.mj486\web\Final Project\ivg.py "'.$arg_pheno.'", "'.$arg_chrom.'"'); $outputi =shell_exec($ivg); echo $outputi;?>
     </body>
 </html>
-</html>
-
-
