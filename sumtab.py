@@ -17,6 +17,9 @@ def sumtab (phenotype):
     filter = cur.fetchall() # fetch the filtered database
     # converts to the dataframe
     data_frame = pd.DataFrame(filter, columns = ['Chromosome', 'Start', 'End', 'Phenotype'])
+	
+	# Add hist.
+	
     print(data_frame) # print the dataframe from the php. REMOVE LATER
     data_frame.to_csv('summary_table.csv')
 

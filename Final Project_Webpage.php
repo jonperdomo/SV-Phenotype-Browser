@@ -58,8 +58,15 @@
         ?>
 
         <?php // Display the resulting graphs and summary tables. Update the path according to the your computer. ?>
-        <?php $histo = escapeshellcmd('python C:\cygwin64\home\marya\Dropbox\Dropbox\bmes550.MonicaJesteen.mj486\web\Final Project\histo.py "'.$arg_pheno.'", "'.$arg_chrom.'"'); $outputh =shell_exec($histo); echo $outputh; ?>
-        <?php $sumtabs = escapeshellcmd('python C:\cygwin64\home\marya\Dropbox\Dropbox\bmes550.MonicaJesteen.mj486\web\Final Project\sumtab.py "'.$arg_pheno.'"'); $outputs =shell_exec($sumtabs); echo $outputs; ?>
-        <?php $ivg = escapeshellcmd('python C:\cygwin64\home\marya\Dropbox\Dropbox\bmes550.MonicaJesteen.mj486\web\Final Project\ivg.py "'.$arg_pheno.'", "'.$arg_chrom.'"'); $outputi =shell_exec($ivg); echo $outputi;?>
+		<?php $outputtest ="Hello"; echo $outputtest; ?>
+        <?php
+		$command = escapeshellcmd('python histo.py "'.$arg_pheno.'", "'.$arg_chrom.'"');
+		$test2 =shell_exec($command);
+		echo $test2;
+		?>
+		
+        <?php $histo = escapeshellcmd('python D:\Program Files\Ampps\www\SV-Phenotype-Browser\histo.py "'.$arg_pheno.'", "'.$arg_chrom.'"'); $outputh =shell_exec($histo); echo $outputh; ?>
+        <?php $sumtabs = escapeshellcmd('python D:\Program Files\Ampps\www\SV-Phenotype-Browser\sumtab.py "'.$arg_pheno.'"'); $outputs =shell_exec($sumtabs); echo $outputs; ?>
+        <?php $ivg = escapeshellcmd('python D:\Program Files\Ampps\www\SV-Phenotype-Browser\ivg.py "'.$arg_pheno.'", "'.$arg_chrom.'"'); $outputi =shell_exec($ivg); echo $outputi;?>
     </body>
 </html>
