@@ -70,9 +70,11 @@
 
         <h3>Summary Table of Phenotype and its Varients</h3>
         <?php include ('create_table.php') ?>
-        <h3>Histogram </h3>
+        
+        <h3>Histogram of Phenotype Location </h3>
         <?php // i would like to call the histogram by name. Python code: plt.savefig('igor.png')
-              echo "<img src='demo.png' >";
+              $name_histo = "{$arg_pheno}_{$arg_chrom}.png"
+              echo <img src='<?php echo $name_histo; ?>'>
         ?>          
     </body>
 </html>
