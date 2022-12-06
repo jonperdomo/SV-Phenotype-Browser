@@ -58,19 +58,12 @@
 				// Get the chromosomes
 				$db_chrom = new SQLite3('sv_phenotypes.sqlite');
 				$query_str = "SELECT DISTINCT CHROM FROM SV_PHENOTYPES WHERE PHENOTYPE = '$selected_phen'";
-				echo "Command = " . $query_str;
-				echo "<br>";
 				$chroms = $db_chrom->query($query_str);
 				$chroms_arr = array();
 				while ($chrom_row = $chroms->fetchArray(SQLITE3_BOTH)) {
 					$chrom_value = $chrom_row[0];
 					$chrom_str = strval($chrom_value);  // Convert to string
 					$chroms_arr[] = $chrom_str;
-				}
-					
-				foreach($chroms_arr as $v){
-					echo "Chrom = " . $v;
-					echo "<br>";
 				}
 			   
 			   // Show the table
