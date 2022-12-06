@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 # To generate a table in python
 def sumtab (phenotype):
     import sqlite3
