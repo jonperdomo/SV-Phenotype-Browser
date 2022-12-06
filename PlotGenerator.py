@@ -49,6 +49,21 @@ def generate_plots(db_filepath):
     for phen_key in sv_phenotype_dict.keys():
         phen_data = sv_phenotype_dict[phen_key]
         for chrom in phen_data.keys():
+
+            # Format the filepath and save the image
+            img_dir = 'Data/'
+            phen_label = phen_key.replace('/', '_')
+            img_filepath = img_dir + '%s_Chr%s.png' % (phen_label, chrom)
+
+            # Check if this plot has already been generated
+            if os.path.exists(img_filepath):
+                continue
+
+            if not os.path.exists(img_dir):
+                # Create a new directory if it does not exist
+                os.makedirs(img_dir)
+
+            # Create the chromosome dictionary
             try:
                 chrom_data = phen_data[chrom]
             except KeyError as e:
@@ -59,29 +74,22 @@ def generate_plots(db_filepath):
             # Generate position counts
             genome_locs = []
             for start_pos, end_pos in chrom_data:
-                sv_positions = list(range(start_pos, end_pos))
-                genome_locs.extend(sv_positions)
+                #sv_positions = list(range(start_pos, end_pos))
+                #genome_locs.extend(sv_positions)
+                genome_locs.extend([start_pos, end_pos])
 
             # Create and save the histogram
-            #bin_size = max([1, round(math.sqrt(len(genome_locs)))])
             bin_size = 10
             plt.hist(genome_locs, bins=bin_size)
             plt.xlabel('Location in GRCh38')
             plt.ylabel('Count')
 
-            title_label = 'Chromosome %s' %chrom
+            title_label = 'Chromosome %s SV breakpoints' %chrom
             plt.title(title_label)
 
-            # Format the filepath and save the image
-            img_dir = 'Data/'
-            phen_label = phen_key.replace('/', '_')
-            img_filepath = img_dir + '%s_Chr%s.png' % (phen_label, chrom)
-            if not os.path.exists(img_dir):
-                # Create a new directory if it does not exist
-                os.makedirs(img_dir)
-
+            # Save the image
             plt.savefig(img_filepath)
-            plt.close()
+            plt.close('all')
 
     print("Done.")
 
