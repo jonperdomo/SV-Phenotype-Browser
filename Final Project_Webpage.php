@@ -12,7 +12,12 @@
     <br><i>Instructions: Select a phenotype and a chromosome from the dropdown menus below.</i><br>
     <div></div>
 
+    <?php
+        // error_reporting(0);
+    ?>
+
     <body> 
+
         <?php // Query for unique chromosomes and unique phenotypes from sqlite database.
              // Array will be used to populate dropdown menus.
             $db = new SQLite3('sv_phenotypes.sqlite');
@@ -28,7 +33,7 @@
                 $pheno_unique[] = $row_pheno[0];
             }
         ?>
-    
+
         <form method= POST> 
                 <label><br>Select a phenotype:<br></label> <?php // Create dropdown menu for phenotypes ?>
                 <select name="phenotype">
@@ -52,21 +57,22 @@
         <input type='submit' name='Sumbit' value='Submit'/>
         </form>
 
-        <?php // Parses form selection to user input in the form of a string.
+        <?php             
             $arg_pheno = explode(')',(explode('(',$_POST["phenotype"])[1]))[0]; echo "Selected phenotype: " .$arg_pheno. "<br>"; 
             $arg_chrom = explode(')',(explode('(',$_POST["chromosome"])[1]))[0]; echo "Selected chromosome: " .$arg_chrom. "<br>";
         ?>
 
         <?php // Display the resulting graphs and summary tables. Update the path according to the your computer. ?>
-		<?php $outputtest ="Hello"; echo $outputtest; ?>
-        <?php
-		$command = escapeshellcmd('python histo.py "'.$arg_pheno.'", "'.$arg_chrom.'"');
-		$test2 =shell_exec($command);
-		echo $test2;
-		?>
-		
-        <?php $histo = escapeshellcmd('python D:\Program Files\Ampps\www\SV-Phenotype-Browser\histo.py "'.$arg_pheno.'", "'.$arg_chrom.'"'); $outputh =shell_exec($histo); echo $outputh; ?>
-        <?php $sumtabs = escapeshellcmd('python D:\Program Files\Ampps\www\SV-Phenotype-Browser\sumtab.py "'.$arg_pheno.'"'); $outputs =shell_exec($sumtabs); echo $outputs; ?>
-        <?php $ivg = escapeshellcmd('python D:\Program Files\Ampps\www\SV-Phenotype-Browser\ivg.py "'.$arg_pheno.'", "'.$arg_chrom.'"'); $outputi =shell_exec($ivg); echo $outputi;?>
+        <?php $histo = escapeshellcmd('python histo.py "'.$arg_pheno.'", "'.$arg_chrom.'"'); ?>
+        <?php $sumtabs = escapeshellcmd('python sumtab.py "'.$arg_pheno.'"'); ?>
+        <?php $ivg = escapeshellcmd('python ivg.py "'.$arg_pheno.'", "'.$arg_chrom.'"'); ?>
+               
+
+        <h3>Summary Table of Phenotype and its Varients</h3>
+        <?php include ('create_table.php') ?>
+        <h3>Histogram </h3>
+        <?php // i would like to call the histogram by name. Python code: plt.savefig('igor.png')
+              echo "<img src='demo.png' >";
+        ?>          
     </body>
 </html>
