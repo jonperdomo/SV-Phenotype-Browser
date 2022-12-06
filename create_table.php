@@ -1,4 +1,4 @@
-<?php // Pull csv file that contains the phenotype varients into webpage and displays the contents to the file
+<?php // Converts summary table .csv to HTML table for webpage php
             echo "<html><body><table>\n\n";
             $file_open = fopen("summary_table.csv", "r");
             while (($line = fgetcsv($file_open)) !== false){
