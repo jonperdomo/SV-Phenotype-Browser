@@ -1,5 +1,7 @@
-# to generate a table in python
+# BY: Monica Jesteen
+# BMES 550-900
 
+# To generate a table in python
 def sumtab (phenotype):
     import sqlite3
     import os
