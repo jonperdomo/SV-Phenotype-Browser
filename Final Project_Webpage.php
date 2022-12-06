@@ -1,3 +1,5 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
 <html>
 <head>
     <style>
@@ -79,6 +81,42 @@
 		?>
 		
 		<!-- Show the chromsome drop-down -->
+	<script>
+	function selectionchanged(){
+		// Format the chromosome value
+		var chrom_tag_data = $('select#fruitselection option:selected').text();
+		let chrom_tag_trim = chrom_tag_data.trim();
+		let chrom_tag = chrom_tag_trim.replace('/', '_');
+		
+		console.log(chrom_tag);
+		 if (chrom_tag === 'None'){
+			$('img#thefruit').attr('src', 'Biomed_TwoLine.png');
+		 }else{
+			//Format the filepath
+			var phen_str_esc = '<?php echo $selected_phen; ?>';
+			let phen_str = unescape(phen_str_esc);
+			console.log(phen_str);
+			let image_filepath = 'Data/' + phen_str + '_Chr' + chrom_tag + '.png';
+			console.log(image_filepath);
+			$('img#thefruit').attr('src', unescape(image_filepath));
+		 }
+	}
+	</script>
+
+	</br>
+	<select id=fruitselection onchange="selectionchanged()">
+		<option value='None'>None</value>
+		<?php
+			if(isset($chroms_arr)){
+				foreach($chroms_arr as $vc){
+					echo "<option value='$vc'>$vc</option>";
+				}
+			}
+		?>
+	</select>
+
+	<img id=thefruit src='Biomed_ThreeLine.png'>
+		<!--
 		<form method=post>
 			<label><br>Select a chromosome:<br></label>
 			<select name='phen_chrom'>
@@ -93,6 +131,7 @@
 			</select>
 		<input type='submit' name='submit_chrom' value='Submit'/>
 		</form>
+		-->
 		
         <h3>Histogram of Phenotype Location </h3>
 
