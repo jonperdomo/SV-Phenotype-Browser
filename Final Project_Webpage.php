@@ -73,7 +73,8 @@
 		   }
 		?>
 		
-		<!-- Show the chromsome drop-down -->
+	<!-- Show the chromsome drop-down -->
+	<h3>Histogram of Phenotype Location </h3>
 	<script>
 	function selectionchanged(){
 		// Format the chromosome value
@@ -83,7 +84,7 @@
 		
 		console.log(chrom_tag);
 		 if (chrom_tag === 'None'){
-			$('img#thefruit').attr('src', 'Biomed_TwoLine.png');
+			$('img#phen_hist').attr('src', 'Biomed_TwoLine.png');
 		 }else{
 			//Format the filepath
 			var phen_str_esc = '<?php echo $selected_phen; ?>';
@@ -91,7 +92,7 @@
 			console.log(phen_str);
 			let image_filepath = 'Data/' + phen_str + '_Chr' + chrom_tag + '.png';
 			console.log(image_filepath);
-			$('img#thefruit').attr('src', unescape(image_filepath));
+			$('img#phen_hist').attr('src', unescape(image_filepath));
 		 }
 	}
 	</script>
@@ -107,26 +108,7 @@
 			}
 		?>
 	</select>
-
-	<img id=thefruit src='Biomed_ThreeLine.png'>
-		<!--
-		<form method=post>
-			<label><br>Select a chromosome:<br></label>
-			<select name='phen_chrom'>
-				<option selected='chrom_selected'>Select...</option>
-			<?php
-				if(isset($chroms_arr)){
-					foreach($chroms_arr as $vc){
-						echo "<option value='$vc'>$vc</option>";
-					}
-				}
-			?>
-			</select>
-		<input type='submit' name='submit_chrom' value='Submit'/>
-		</form>
-		-->
+	<img id=phen_hist src='Biomed_ThreeLine.png'>
 		
-        <h3>Histogram of Phenotype Location </h3>
-
     </body>
 </html>
