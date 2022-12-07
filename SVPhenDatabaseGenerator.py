@@ -7,11 +7,7 @@ import sqlite3
 from owlready2 import *
 
 
-def read_mondo_ids_from_vcf():
-    pass
-
-
-def read_vcf(obo, path):
+def generate_phen_database(obo, path):
     # Create the database
     db_filepath = r"sv_phenotypes.sqlite"
     conn = sqlite3.connect(db_filepath)
@@ -80,18 +76,15 @@ def read_vcf(obo, path):
     return vcf_df
 
 
-def get_phenotype_from_mondo_id(mondo_id):
+def get_phenotype_ontology():
     print("Loading MONDO ontology...")
     onto = get_ontology("http://purl.obolibrary.org/obo/mondo.owl").load()
     obo = onto.get_namespace("http://purl.obolibrary.org/obo/")
-    mondo_field = 'MONDO_' + str(mondo_id)
-    phenotype = obo[mondo_field].label[0]
-    print("Loading complete.")
-    print("Phenotype = ", phenotype)
+    print("Loaded.")
 
     return obo
 
 
 if __name__ == '__main__':
-    obo = get_phenotype_from_mondo_id("0018838")
-    vcf_df = read_vcf(obo, r'vcf/GRCh38.variant_call.clinical.pathogenic_or_likely_pathogenic.vcf')
+    obo = get_phenotype_ontology()
+    vcf_df = generate_phen_database(obo, r'vcf/GRCh38.variant_call.clinical.pathogenic_or_likely_pathogenic.vcf')
