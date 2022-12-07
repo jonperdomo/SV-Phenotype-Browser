@@ -66,15 +66,44 @@
 					$chroms_arr[] = $chrom_str;
 				}
 			   
-			   // Show the table
+			   // Show the table			   
 			   //$sumtabs = escapeshellcmd('python sumtab.py "'.$arg_pheno.'"');
+			   $data_query_str = "SELECT CHROM, SV_START, SV_END, PHENOTYPE FROM SV_PHENOTYPES WHERE PHENOTYPE = '$selected_phen'";
+			   $sv_data = $db_chrom->query($data_query_str);
+				echo "<table border='1'>
+
+				<tr>
+
+				<th>CHROM</th>
+
+				<th>SV_START</th>
+
+				<th>SV_END</th>
+
+				<th>PHENOTYPE</th>
+
+				</tr>";
+			   while($sv_row = $sv_data->fetchArray(SQLITE3_BOTH))
+			  {
+				  echo "<tr>";
+
+				  echo "<td>" . $sv_row[0] . "</td>";
+
+				  echo "<td>" . $sv_row[1] . "</td>";
+
+				  echo "<td>" . $sv_row[2] . "</td>";
+
+				  echo "<td>" . $sv_row[3] . "</td>";
+
+				  echo "</tr>";
+			  }
 		   } else {
 			   echo "None selected.";
 		   }
 		?>
 		
 	<!-- Show the chromsome drop-down -->
-	<h3>Histogram of Phenotype Location </h3>
+	<label>Histogram of Phenotype Location </label>
 	<script>
 	function selectionchanged(){
 		// Format the chromosome value
@@ -98,6 +127,7 @@
 	</script>
 
 	</br>
+	<label>Select Chromosome: </label>
 	<select id=fruitselection onchange="selectionchanged()">
 		<option value='None'>None</value>
 		<?php
@@ -109,6 +139,6 @@
 		?>
 	</select>
 	<img id=phen_hist src='Biomed_ThreeLine.png'>
-		
+	
     </body>
 </html>
